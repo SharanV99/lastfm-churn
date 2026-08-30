@@ -1,5 +1,7 @@
 import os
 import requests
+import time
+import pandas as pd
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,8 +17,24 @@ params = {
     "limit": 5
 }
 
-response = requests.get(url, params=params)
-data = response.json()
+all_rows = []
 
-print(response.status_code)
-print(data)
+for page in range(1, 6):
+    params["page"] = page
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    tracks = data["recenttracks"]["track"]
+    for track in tracks:
+        artist = track["artist"]["#text"]
+        name = track["name"]
+        uts = track["date"]["uts"]
+        all_rows.append({"artist": artist, "track": name, "timestamp": uts})
+
+    print(f"Fetched page {page}, rows so far: {len(all_rows)}")
+    time.sleep(0.25)
+
+print(f"Done. Collected {len(all_rows)} rows total.")
+
+df = pd.DataFrame(all_rows)
+df.to_csv("scrobbles.csv", index=False)
