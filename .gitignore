@@ -2,3 +2,4 @@ venv/
 .env
 scrobbles.csv
 roster.csv
+churn_dataset.csv
