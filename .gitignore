@@ -3,3 +3,4 @@ venv/
 scrobbles.csv
 roster.csv
 churn_dataset.csv
+.DS_Store
