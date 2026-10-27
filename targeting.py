@@ -13,7 +13,7 @@ model.fit(X, y)
 df["churn_prob"] = model.predict_proba(X)[:, 1]
 
 SAVE_RATE = 0.18
-CONTACT_COST = 1.0
+CONTACT_COST = 20.0
 VALUE_PER_SCROBBLE = 0.05
 
 df["customer_value"] = df["scrobbles_per_week"] * VALUE_PER_SCROBBLE * 52

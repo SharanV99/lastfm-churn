@@ -4,6 +4,10 @@ Predicting which Last.fm users are about to disengage from the platform, then tu
 
 **The deliverable isn't a model — it's a decision:** of the users most likely to churn, which are actually worth contacting, and how would we prove a retention nudge works?
 
+![Targeting: which users are worth a retention nudge](charts/targeting.png)
+
+*Each point is a user, plotted by churn risk and value. Orange = positive expected value from contacting them. The model plus the economics turn 823 users into a focused list of 171 worth a retention nudge.*
+
 ## What this project does
 
 1. **Collects its own data** from the Last.fm API — no pre-made dataset.
@@ -26,6 +30,10 @@ Churn is defined by recency, so recency cannot be a feature — that would leak 
 ### Model
 Logistic regression with balanced class weights (the sample is imbalanced). **AUC 0.82** — high enough to be useful, not so high as to indicate leakage (a near-1.0 AUC would signal the label had leaked into the features).
 
+![What predicts churn](charts/features.png)
+
+*Exploratory, rising listening (artist variety, upward trend) predicts retention; long gaps between plays predict churn.*
+
 ### Targeting economics
 A churn probability isn't a decision. For each user:
 
@@ -34,7 +42,7 @@ A churn probability isn't a decision. For each user:
 Only users with positive expected value are targeted. The **18% save rate** is a benchmark from a real telecom win-back campaign I ran. Output: a ranked list of users to contact, with expected return.
 
 ### Experiment design
-To validate a retention nudge, I designed an A/B test and ran the power analysis: detecting an 18% relative reduction in churn (80% → 65.6%) at 80% power and 5% significance requires ~148 users per arm (~295 total). With 785 targetable users, the experiment is **adequately powered** — though in a production setting with a realistic (lower) baseline churn rate, the targetable pool would shrink and sample size would need re-checking.
+To validate a retention nudge, I designed an A/B test and ran the power analysis: detecting an 18% relative reduction in churn (80% → 65.6%) at 80% power and 5% significance requires ~148 users per arm (~295 total). With only 171 targetable users, **the experiment is underpowered** — a null result would be inconclusive, not evidence the nudge failed. The honest path is to widen the cohort, accept a smaller detectable effect, or restrict to the highest-value users where a larger per-user effect justifies the cost. Recognizing this *before* running the test is the point: an underpowered experiment reported as a null is a common and costly analytical error.
 
 ## Key limitations (honest notes)
 
@@ -52,3 +60,4 @@ Python · Last.fm API · pandas · scikit-learn · statsmodels
 - `model.py` — train and evaluate the churn model
 - `targeting.py` — expected-value targeting
 - `experiment.py` — A/B test power analysis
+- `make_charts.py` — generate the charts above
