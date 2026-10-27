@@ -1,5 +1,7 @@
 # Last.fm Churn Prediction & Targeting
 
+![Last.fm churn prediction](charts/banner.png)
+
 Predicting which Last.fm users are about to disengage from the platform, then turning those predictions into a ranked targeting decision and a designed experiment to validate intervention.
 
 **The deliverable isn't a model — it's a decision:** of the users most likely to churn, which are actually worth contacting, and how would we prove a retention nudge works?
